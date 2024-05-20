@@ -1,0 +1,33 @@
+In master
+----------
+
+#cd /etc/local/hadoop/etc/hadoop
+
+#nano hdfs-site.xml
+
+add property
+
+<property>
+<name>dfs.hosts.exclude</name>
+<value>/usr/local/hadoop/exclude/hosts.exclude</value>
+</property>
+
+then go to
+
+/usr/local/hadoop/
+
+create directory
+
+#mkdir exclude
+
+#cd exclude
+
+#nano hosts.exclude
+
+add datanode
+which you want to exclude
+
+hdfs dfsadmin -refreshNodes
+
+check 
+browser http://master:9870

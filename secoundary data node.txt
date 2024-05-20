@@ -1,0 +1,97 @@
+    if you want to change the DN3 to  secondary-name-node(snn)
+
+
+-------------------------------------------- master -----------------------------------------------------
+    stop-all.sh
+    cd /usr/local/hadoop/etc/hadoop
+    nano workers
+         edit this file
+         from here from DN3 and add snn
+            snn
+    hdfs dfsadmin -refreshNodes
+
+
+-------------------------------------------- datanode3 -----------------------------------------------------
+    jps
+    hadoop-daemon.sh stop datanode
+    jps
+    yarn-daemon.sh stop nodemanager
+    jps
+
+
+-------------------------------------------- master -----------------------------------------------------
+
+     go in browser
+     htpp://master:9870
+
+
+-------------------------------------------- datanode3 -----------------------------------------------------
+
+     sudo hostnamectl set-hostname snn
+     sudo hostname snn
+     exit
+     open new terminal
+     cd Desktop
+     sudo nano /etc/hosts
+             edit this file
+             change the DN3 to snn
+                192.168.144.140 snn
+     cd /usr/local/hadoop/etc/hadoop
+     rm -rf *
+     ls
+     
+-------------------------------------------- master -----------------------------------------------------
+
+     sudo nano /etc/hosts 
+               edit this file
+               change the DN3 to snn
+                192.168.144.140 snn 
+    rsync -a /usr/local/hadoop/etc/hadoop/* hduser@snn:/usr/local/hadoop/etc/hadoop
+    ssh hduser@snn
+    exit
+    cd /usr/local/hadoop/etc/hadoop
+    nano hdfs-site.xml
+                <property>
+                <name>dfs.secondary.http.address</name>
+                <value>snn:9869</value>
+                </property>
+
+
+-------------------------------------------- datanode3 -----------------------------------------------------
+
+       ls
+       nano hdfs-site.xml
+                </property>
+                <name>dfs.namenode.checkpoint.dir</name>
+                <value>/usr/local/hadoop/hd-data/snn</value>
+                </property>
+       cd ../../hd-data
+       ls
+       rm -rf *
+       cd /usr/local/hadoop/etc/hadoop
+            nano hdfs-site.xml
+                     <property>
+                     <name>dfs.namenode.checkpoint.dir</name>
+            	     <value>/usr/local/hadoop/hd-data/snn</value>
+                     </property>
+                     <property>
+            	     <name>dfs.namenode.checkpoint.period</name>
+            	     <value>1800</value>
+                     </property>
+
+
+-------------------------------------------- master -----------------------------------------------------
+
+      start-all.sh
+      jps
+      hdfs dfsadmin -refreshNodes
+
+
+-------------------------------------------- datanode3 -----------------------------------------------------
+
+        ---- data node -----
+        check /usr/local/hadoop/hd-data
+        check /usr/local/hadoop/hd-data/snn
+
+       
+
